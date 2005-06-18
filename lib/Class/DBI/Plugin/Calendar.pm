@@ -8,7 +8,7 @@ use Calendar::Simple ();
 use Time::Piece;
 use Class::DBI::Plugin::Calendar::Day;
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 sub import {
 	my ($self, $date_field) = @_;

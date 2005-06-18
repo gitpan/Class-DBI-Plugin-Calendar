@@ -13,7 +13,12 @@ package My::Film;
 use base 'Class::DBI';
 use Class::DBI::Plugin::Calendar qw(date);
 
-my @DSN = ("dbi:mysql:test", '', '', {RaiseError=>1});
+my $dbname	=  $ENV{DBD_MYSQL_DBNAME}	|| 'test';
+my $db		= "dbi:mysql:$dbname";
+my $user	=  $ENV{DBD_MYSQL_USER}		|| '';
+my $pass	=  $ENV{DBD_MYSQL_PASSWD}	|| '';
+
+my @DSN = ("dbi:mysql:$dbname", $user, $pass, {RaiseError=>1});
 END { __PACKAGE__->db_Main->do(q{ DROP TABLE movies }) };
 
 __PACKAGE__->set_db(Main => @DSN);

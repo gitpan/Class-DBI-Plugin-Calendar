@@ -4,7 +4,7 @@ use warnings FATAL => 'all';
 
 use Carp;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use constant DATE => 0;
 use constant AREF => 1;
@@ -55,11 +55,13 @@ sub agenda { wantarray ? @{shift->[AREF]} : shift->[AREF] }
 
 1;
 
+__END__
+
 # Below is stub documentation for your module. You'd better edit it!
 
 =head1 NAME
 
-Class::DBI::Plugin::Calendar - Simple Calendar Support for Class::DBI
+Class::DBI::Plugin::Calendar::Day - Calendar Day Support for Class::DBI
 
 =head1 SYNOPSIS
 
@@ -67,17 +69,16 @@ Class::DBI::Plugin::Calendar - Simple Calendar Support for Class::DBI
   use base 'Class::DBI';
   use Class::DBI::Plugin::Calendar qw(date_fieldname);
 
-  # the same as Calendar::Simple::calendar
   my @weeks = DB->calendar; # current month, based on Calendar::Simple
   for my $week (@weeks) {
-  	for my $day (@$week) {
+    for my $day (@$week) {
       if($day->ok) {
-      	printf '%03d', $day->date->mday;
+        printf '%03d', $day->date->mday;
       } else { # just a placeholder
-      	print "   ";
+        print "   ";
       }
       print "\n";
-  	}
+    }
   }
   
   @events = $day->events unless $day->empty;
@@ -87,7 +88,7 @@ Class::DBI::Plugin::Calendar - Simple Calendar Support for Class::DBI
 These are simple objects which represent days in Class::DBI::Plugin::Calendar
 applications.
 
-=head2 my $time_piece = $day->ok
+=head2 my $real = $day->ok
 
 This means that this day refers to a real day, and is not just a placeholder
 so that the week in which it resides may contain seven days. This should be
@@ -109,7 +110,7 @@ This gives the number of events in the day. Aliases: num, sum, has.
 
 The opposite of num_events.
 
-=head2 my $num = $day->agenda
+=head2 my @events = $day->agenda
 
 The events for that day, ordered by date_fieldname (above). Aliases:
 objects, events
