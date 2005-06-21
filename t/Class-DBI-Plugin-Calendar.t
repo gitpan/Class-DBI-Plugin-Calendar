@@ -2,24 +2,43 @@
 use strict;
 
 use Test::More;
+use DBI;
+
+my @DSN;
+my $dbh;
 
 BEGIN {
-	eval "use DBD::mysql";
-	plan $@ ? (skip_all => 'needs DBD::mysql for testing') : (tests => 5);
+	my $dbname = $ENV{DBD_MYSQL_DBNAME}	|| 'test';
+	my $db		= "dbi:mysql:$dbname";
+	my $user	=  $ENV{DBD_MYSQL_USER}		|| '';
+	my $pass	=  $ENV{DBD_MYSQL_PASSWD}	|| '';
+
+	@DSN = ($db, $user, $pass, {RaiseError=>1});
+
+	eval {
+		$dbh = DBI->connect(@DSN) or die $DBI::errstr;
+		$dbh->do(qq[ DROP TABLE IF EXISTS movies ]);
+		$dbh->do(qq[
+		     CREATE TABLE movies (
+    	    	id     int(2) unsigned not null primary key auto_increment,
+    	    	title  VARCHAR(255),
+    	    	date   DATETIME
+    		 )
+		]) or die $DBI::errstr;
+	};
+	plan $@ ? (skip_all => 'needs a mysql account with create/drop table privs for testing') : (tests => 5);
 }
+
+# clean the db
+END {
+	$dbh->do(q{ DROP TABLE movies });
+};
+
 
 package My::Film;
 
 use base 'Class::DBI';
 use Class::DBI::Plugin::Calendar qw(date);
-
-my $dbname	=  $ENV{DBD_MYSQL_DBNAME}	|| 'test';
-my $db		= "dbi:mysql:$dbname";
-my $user	=  $ENV{DBD_MYSQL_USER}		|| '';
-my $pass	=  $ENV{DBD_MYSQL_PASSWD}	|| '';
-
-my @DSN = ("dbi:mysql:$dbname", $user, $pass, {RaiseError=>1});
-END { __PACKAGE__->db_Main->do(q{ DROP TABLE movies }) };
 
 __PACKAGE__->set_db(Main => @DSN);
 __PACKAGE__->table('movies');
@@ -30,21 +49,7 @@ __PACKAGE__->has_a(date => 'Time::Piece',
 	deflate => sub { shift->strftime('%Y-%m-%d %H:%M:%S') },
 );
 
-sub CONSTRUCT {
-	shift->db_Main->do(
-		qq{
-     CREATE TABLE movies (
-        id     int(2) unsigned not null primary key auto_increment,
-        title  VARCHAR(255),
-        date   DATETIME
-     )
-	}
-	);
-}
-
 package main;
-
-My::Film->CONSTRUCT;
 
 my @lt = localtime;
 $lt[4] = sprintf '%02d', $lt[4] + 1;

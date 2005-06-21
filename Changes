@@ -1,5 +1,8 @@
 Revision history for Perl extension Class::DBI::Plugin::Calendar.
 
+0.16  Tue Jun 21 2005
+	- better testing
+
 0.14  Fri Jun 17
 	- first release candidate
 
