@@ -7,7 +7,9 @@ WriteMakefile(
     VERSION_FROM      => 'lib/Class/DBI/Plugin/Calendar.pm', # finds $VERSION
     PREREQ_PM         => {
     	Calendar::Simple	=>	1.13,
-    	Time::Piece			=>	1.08,
+    	Time::Piece			  =>	1.08,
+			DBI								=>	1,
+			DBD::mysql				=>	1,
     }, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM  => 'lib/Class/DBI/Plugin/Calendar.pm', # retrieve abstract from module

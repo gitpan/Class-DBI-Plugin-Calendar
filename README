@@ -1,4 +1,4 @@
-Class-DBI-Plugin-Calendar version 0.01
+Class-DBI-Plugin-Calendar version 0.18
 ======================================
 
 The README is used to introduce the module and provide instructions on
@@ -25,13 +25,15 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-  blah blah blah
+  DBI
+  Calendar::Simple
+  Time::Piece
 
 COPYRIGHT AND LICENCE
 
-Put the correct copyright and licence information here.
+This coftware is licensed under the same terms as Perl itself.
 
-Copyright (C) 2005 by A. U. Thor
+Copyright (C) 2010 by James Tolley
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.6 or,

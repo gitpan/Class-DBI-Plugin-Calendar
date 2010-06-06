@@ -71,7 +71,7 @@ Class::DBI::Plugin::Calendar::Day - Calendar Day Support for Class::DBI
 
   my @weeks = DB->calendar; # current month, based on Calendar::Simple
   for my $week (@weeks) {
-    for my $day (@$week) {
+    for my $day (@$week) { # always 7 days, some may be placeholders
       if($day->ok) {
         printf '%03d', $day->date->mday;
       } else { # just a placeholder
